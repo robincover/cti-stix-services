@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Attack Pattern",
+  "allOf": [
+    {
+      "$ref": "#/definitions/CommonProperties"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "attack-pattern"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "kill_chain_phases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/KillChainPhase"
+          }
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "repository": {
+    "host": "127.0.0.1",
+    "database": "stixStore",
+    "connector": "mongodb"
+  }
+}
