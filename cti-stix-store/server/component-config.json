@@ -1,0 +1,16 @@
+{
+  "loopback-component-jsonapi": {
+    "restApiRoot": "/cti-stix-store-api"
+  },
+  "loopback-component-explorer": {
+    "mountPath": "/explorer",
+    "consumes": [
+      "application/vnd.api+json",
+      "application/json"
+    ],
+    "produces": [
+      "application/vnd.api+json",
+      "application/json"
+    ]
+  }
+}
