@@ -125,6 +125,14 @@ module.exports = class LoopbackModelService {
       if (propertyKey === 'type') {
         delete schemaProperties[propertyKey];
       }
+
+      if (property.type === 'array') {
+        if (property.items) {
+          if (property.items.type === 'string') {
+            schemaProperties[propertyKey] = [String];
+          }
+        }
+      }
     }
 
     return schemaProperties;
