@@ -1,7 +1,8 @@
 {
   "repository": {
-    "host": "127.0.0.1",
-    "database": "stixStore",
-    "connector": "mongodb"
+    "connector": "mongodb",
+    "database": "stix",
+    "host": "localhost",
+    "port": 27017
   }
 }
