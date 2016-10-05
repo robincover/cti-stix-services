@@ -121,6 +121,18 @@ module.exports = class LoopbackModelService {
       } else if (objectDefinition.required.indexOf(propertyKey) >= 0) {
         property.required = true;
       }
+
+      if (propertyKey === 'type') {
+        delete schemaProperties[propertyKey];
+      }
+
+      if (property.type === 'array') {
+        if (property.items) {
+          if (property.items.type === 'string') {
+            schemaProperties[propertyKey] = [String];
+          }
+        }
+      }
     }
 
     return schemaProperties;

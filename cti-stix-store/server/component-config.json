@@ -5,12 +5,10 @@
   "loopback-component-explorer": {
     "mountPath": "/explorer",
     "consumes": [
-      "application/vnd.api+json",
-      "application/json"
+      "application/vnd.api+json"
     ],
     "produces": [
-      "application/vnd.api+json",
-      "application/json"
+      "application/vnd.api+json"
     ]
   }
 }
