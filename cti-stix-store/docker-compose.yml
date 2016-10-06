@@ -3,8 +3,6 @@ services:
   cti-stix-store:
     container_name: cti-stix-store
     build: .
-    volumes:
-     - .:/usr/share/cti-stix-store
     ports:
      - "3000:3000"
     links:
