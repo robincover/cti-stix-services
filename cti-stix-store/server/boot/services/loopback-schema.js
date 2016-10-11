@@ -10,6 +10,7 @@ module.exports = class LoopbackSchemaService {
    *
    */
   constructor() {
+    this.schemaLocationKey = 'schemaLocation';
     const JsonSchemaService = require('./json-schema');
     const schemaBaseDirectory = `${__dirname}/schemas/stix`;
     this.jsonSchemaService = new JsonSchemaService(schemaBaseDirectory);
@@ -28,38 +29,86 @@ module.exports = class LoopbackSchemaService {
     const modelDataSource = this.getModelDataSource(server);
 
     if (modelDataSource) {
+      const jsonSchemaService = this.jsonSchemaService;
       const loopbackModelService = this.loopbackModelService;
       const disableRemoteMethods = this.disableRemoteMethods;
       const afterJsonApiSerializeHandler = this.afterJsonApiSerializeHandler.bind(this);
       const beforeJsonApiSerializeHandler = this.beforeJsonApiSerializeHandler.bind(this);
 
-      const schemaPromise = this.jsonSchemaService.getSchema();
-      schemaPromise.then(function(schema) {
-        for (const definitionKey in schema.definitions) {
-          const definition = schema.definitions[definitionKey];
-          const objectDefinition = loopbackModelService.getObjectDefinition(definition);
-          const model = loopbackModelService.getModel(objectDefinition, definitionKey);
-          const publicModel = loopbackModelService.isPublicModel(objectDefinition);
+      const schemaLocationPromise = this.getSchemaLocation(server);
+      schemaLocationPromise.then(function(schemaLocation) {
+        console.log(`Reading Schema [${schemaLocation}]`);
+        const schemaPromise = jsonSchemaService.readSchema(schemaLocation);
 
-          if (publicModel) {
-            console.log(`Registering Model [${model.modelName}] Path [${model.settings.http.path}]`);
-            disableRemoteMethods(model);
-            model.afterJsonApiSerialize = afterJsonApiSerializeHandler;
-            model.beforeJsonApiSerialize = beforeJsonApiSerializeHandler;
-          } else {
-            console.log(`Registering Model [${model.modelName}]`);
+        schemaPromise.then(function(schema) {
+          for (const definitionKey in schema.definitions) {
+            const definition = schema.definitions[definitionKey];
+            const objectDefinition = loopbackModelService.getObjectDefinition(definition);
+            const model = loopbackModelService.getModel(objectDefinition, definitionKey);
+            const publicModel = loopbackModelService.isPublicModel(objectDefinition);
+
+            if (publicModel) {
+              console.log(`Registering Model [${model.modelName}] Path [${model.settings.http.path}]`);
+              disableRemoteMethods(model);
+              model.afterJsonApiSerialize = afterJsonApiSerializeHandler;
+              model.beforeJsonApiSerialize = beforeJsonApiSerializeHandler;
+            } else {
+              console.log(`Registering Model [${model.modelName}]`);
+            }
+
+            const modelOptions = {
+              dataSource: modelDataSource,
+              public: publicModel
+            };
+            server.model(model, modelOptions);
           }
+        });
 
-          const modelOptions = {
-            dataSource: modelDataSource,
-            public: publicModel
-          };
-          server.model(model, modelOptions);
-        }
+        schemaPromise.catch(function(error) {
+          console.error(`Unable to read Schema from Location [${schemaLocation}] ${error}: ${error.stack}`);
+        });
+      });
+
+      schemaLocationPromise.catch(function(error) {
+        console.error(`Unable to get Schema Location: ${error}: ${error.stack}`);
       });
     } else {
       console.error('Loopback Data Source with Connector not found');
     }
+  }
+
+  /**
+   * Get Schema Location
+   *
+   * @param {Object} server Loopback Server
+   * @return {Object} Promise object resolving to Schema Location string
+   */
+  getSchemaLocation(server) {
+    const self = this;
+    return new Promise(function(resolve, reject) {
+      const configuredSchemaLocation = server.get(self.schemaLocationKey);
+
+      if (configuredSchemaLocation) {
+        console.log(`Using Configured Schema Location [${configuredSchemaLocation}]`);
+        resolve(configuredSchemaLocation);
+      } else {
+        const schemaPromise = self.jsonSchemaService.getSchema();
+        schemaPromise.then(function(schema) {
+          const tmp = require('tmp');
+          tmp.setGracefulCleanup();
+
+          const schemaFile = tmp.fileSync();
+          const schemaString = JSON.stringify(schema);
+
+          const fs = require('fs');
+
+          console.log(`Writing Default Schema Location [${schemaFile.name}]`);
+          fs.writeSync(schemaFile.fd, schemaString);
+          resolve(schemaFile.name);
+        });
+        schemaPromise.catch(reject);
+      }
+    });
   }
 
   /**
