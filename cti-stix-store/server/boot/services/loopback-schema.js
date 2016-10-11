@@ -30,10 +30,8 @@ module.exports = class LoopbackSchemaService {
 
     if (modelDataSource) {
       const jsonSchemaService = this.jsonSchemaService;
-      const loopbackModelService = this.loopbackModelService;
-      const disableRemoteMethods = this.disableRemoteMethods;
-      const afterJsonApiSerializeHandler = this.afterJsonApiSerializeHandler.bind(this);
-      const beforeJsonApiSerializeHandler = this.beforeJsonApiSerializeHandler.bind(this);
+      const getModelConfiguration = this.getModelConfiguration.bind(this);
+
 
       const schemaLocationPromise = this.getSchemaLocation(server);
       schemaLocationPromise.then(function(schemaLocation) {
@@ -43,24 +41,19 @@ module.exports = class LoopbackSchemaService {
         schemaPromise.then(function(schema) {
           for (const definitionKey in schema.definitions) {
             const definition = schema.definitions[definitionKey];
-            const objectDefinition = loopbackModelService.getObjectDefinition(definition);
-            const model = loopbackModelService.getModel(objectDefinition, definitionKey);
-            const publicModel = loopbackModelService.isPublicModel(objectDefinition);
+            const modelConfiguration = getModelConfiguration(definition, definitionKey);
 
-            if (publicModel) {
-              console.log(`Registering Model [${model.modelName}] Path [${model.settings.http.path}]`);
-              disableRemoteMethods(model);
-              model.afterJsonApiSerialize = afterJsonApiSerializeHandler;
-              model.beforeJsonApiSerialize = beforeJsonApiSerializeHandler;
+            if (modelConfiguration.publicModel) {
+              console.log(`Registering Model [${modelConfiguration.model.modelName}] Path [${modelConfiguration.model.settings.http.path}]`);
             } else {
-              console.log(`Registering Model [${model.modelName}]`);
+              console.log(`Registering Model [${modelConfiguration.model.modelName}]`);
             }
 
             const modelOptions = {
               dataSource: modelDataSource,
-              public: publicModel
+              public: modelConfiguration.publicModel
             };
-            server.model(model, modelOptions);
+            server.model(modelConfiguration.model, modelOptions);
           }
         });
 
@@ -75,6 +68,31 @@ module.exports = class LoopbackSchemaService {
     } else {
       console.error('Loopback Data Source with Connector not found');
     }
+  }
+
+  /**
+   * Get Model Configuration
+   *
+   * @param {Object} definition Object Definition
+   * @param {string} definitionKey Object Definition Key
+   * @return Loopback Model Configuration
+   */
+  getModelConfiguration(definition, definitionKey) {
+    const objectDefinition = this.loopbackModelService.getObjectDefinition(definition);
+    const model = this.loopbackModelService.getModel(objectDefinition, definitionKey);
+    const publicModel = this.loopbackModelService.isPublicModel(objectDefinition);
+
+    if (publicModel) {
+      this.disableRemoteMethods(model);
+      model.afterJsonApiSerialize = this.afterJsonApiSerializeHandler.bind(this);
+      model.beforeJsonApiSerialize = this.beforeJsonApiSerializeHandler.bind(this);
+    }
+
+    const modelConfiguration = {
+      model: model,
+      publicModel: publicModel
+    };
+    return modelConfiguration;
   }
 
   /**
