@@ -1,0 +1,25 @@
+version: '2'
+services:
+  cti-stix-gateway:
+    container_name: cti-stix-gateway
+    image: nginx
+    volumes:
+     - ./cti-stix-gateway/nginx/conf.d:/etc/nginx/conf.d
+    ports:
+     - "8080:80"
+    links:
+     - cti-stix-discover
+     - cti-stix-store
+  cti-stix-discover:
+    container_name: cti-stix-discover
+    build: cti-stix-discover
+    links:
+     - cti-stix-store:cti-stix-store
+  cti-stix-store:
+    container_name: cti-stix-store
+    build: cti-stix-store
+    links:
+     - cti-stix-services-mongo:repository
+  cti-stix-services-mongo:
+    container_name: cti-stix-services-mongo
+    image: mongo
