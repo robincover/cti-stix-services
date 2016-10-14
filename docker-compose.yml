@@ -1,0 +1,20 @@
+version: '2'
+services:
+  cti-stix-store:
+    container_name: cti-stix-store
+    build: ./cti-stix-store
+    ports:
+     - "3000:3000"
+    links:
+     - mongo:repository
+  mongo:
+    image: mongo
+    container_name: mongo
+
+
+  cti-stix-ui: 
+    container_name: cti-stix-ui
+    build: ./cti-stix-ui
+    ports:
+    - "433:8443"
+    - "50000:50000"
