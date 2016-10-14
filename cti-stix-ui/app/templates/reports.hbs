@@ -1,0 +1,46 @@
+<div class="container">
+  {{help-card help=model.help}}
+  <h4>
+    <i class="material-icons">dashboard</i>
+    Reports
+  </h4>
+
+  <div class="row">
+    <div class="col s6">
+      {{#link-to "report-new" (query-params page=1 step="selection") class="btn waves-effect waves-light"}}
+        New
+      {{/link-to}}
+      <a class="btn waves-effect waves-light" href="/unfetter-discover-api/bundles/reports/" download ="reports.json" target="_blank" >
+        Download
+      </a> 
+    </div>
+   
+    <div class="col s6 right-align">
+      <span class="right-align">Results: {{model.items.length}}</span>
+    </div>
+  </div>
+
+  {{#md-collection content=model.items as |item|}}
+    <div class="collection-item avatar">
+      <i class="material-icons circle">
+        dashboard
+      </i>
+
+      {{#link-to "report-dashboard" item.id class="title"}}
+        {{item.name}}
+      {{/link-to}}
+      <p>      
+        {{moment-format item.created "YYYY-MM-DD  HH:MM"}}
+      </p>
+    
+      <div class="secondary-content">
+        <a class="btn waves-effect waves-light" href="/unfetter-discover-api/bundles/reports/{{item.id}}" download="{{item.id}}.json" target="_blank" >
+          <i class="material-icons">file_download</i>
+        </a>    
+        {{#link-to (query-params deleteObjectId=item.id) class="btn waves-effect waves-light red"}}
+          <i class="material-icons">delete</i>
+        {{/link-to}}
+      </div>
+    </div>
+  {{/md-collection}}
+</div>

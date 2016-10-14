@@ -1,0 +1,84 @@
+<header class="application-header">
+  {{#if model.securityMarking.label}}
+  <div class="security-marking-label">
+    {{model.securityMarking.label}}
+  </div>
+  {{/if}}
+</header>
+{{#navigation-bar}}
+  <div class="container">
+  {{#link-to "index" class="brand-logo"}}
+    <img src="/cti-stix-ui/brand-logo.png" />
+  {{/link-to}}
+
+  <a class="button-collapse" data-activates="side-nav">
+    <i class="material-icons">menu</i>
+  </a>
+
+  <ul id="settings-dropdown" class="dropdown-content">    
+    {{#link-to "attack-patterns" tagName="li"}}
+      {{link-to "Attack Patterns" "attack-patterns"}}
+    {{/link-to}}
+    {{#link-to "course-of-actions" tagName="li"}}
+      {{link-to "Courses of Actions" "course-of-actions"}}
+    {{/link-to}}
+    {{#link-to "indicators" tagName="li"}}
+      {{link-to "Indicators" "indicators"}}
+    {{/link-to}}
+    {{#link-to "relationships" tagName="li"}}
+      {{link-to "Relationships" "relationships"}}
+    {{/link-to}}
+    {{#link-to "threat-actors" tagName="li"}}
+      {{link-to "Threat Actors" "threat-actors"}}
+    {{/link-to}}
+  </ul>
+
+  <ul class="right hide-on-med-and-down">
+    {{#link-to "reports" tagName="li"}}
+      {{link-to "Reports" "reports"}}
+    {{/link-to}}
+    <li>
+      <a class="dropdown-button" href="#settings-dropdown" data-activates="settings-dropdown">       
+        Settings
+        <i class="material-icons right">arrow_drop_down</i>
+      </a>
+    </li>
+    {{#link-to "partners" tagName="li"}}
+      {{link-to "Partners" "partners"}}
+    {{/link-to}}
+  </ul>
+  </div>
+
+  <ul class="side-nav" id="side-nav">
+    {{#link-to "reports" tagName="li"}}
+      {{link-to "Reports" "reports"}}
+    {{/link-to}}
+    {{#link-to "attack-patterns" tagName="li"}}
+      {{link-to "Attack Patterns" "attack-patterns"}}
+    {{/link-to}}
+    {{#link-to "course-of-actions" tagName="li"}}
+      {{link-to "Courses of Actions" "course-of-actions"}}
+    {{/link-to}}
+    {{#link-to "indicators" tagName="li"}}
+      {{link-to "Indicators" "indicators"}}
+    {{/link-to}}
+    {{#link-to "relationships" tagName="li"}}
+      {{link-to "Relationships" "relationships"}}
+    {{/link-to}}
+    {{#link-to "threat-actors" tagName="li"}}
+      {{link-to "Threat Actors" "threat-actors"}}
+    {{/link-to}}
+
+  </ul>
+{{/navigation-bar}}
+
+{{liquid-outlet}}
+<footer class="application-footer">
+  {{#if model.securityMarking.label}}
+  <div class="security-marking-label">
+    {{model.securityMarking.label}}
+  </div>
+  {{/if}}
+</footer>
+
+{{liquid-modal}}

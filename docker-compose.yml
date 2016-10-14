@@ -10,6 +10,7 @@ services:
     links:
      - cti-stix-discover
      - cti-stix-store
+     - cti-stix-ui
   cti-stix-discover:
     container_name: cti-stix-discover
     build: cti-stix-discover
@@ -23,3 +24,10 @@ services:
   cti-stix-services-mongo:
     container_name: cti-stix-services-mongo
     image: mongo
+  cti-stix-ui: 
+    container_name: cti-stix-ui
+    build: cti-stix-ui
+    ports:
+    links:
+    - cti-stix-store
+    

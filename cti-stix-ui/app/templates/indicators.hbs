@@ -1,0 +1,28 @@
+<div class="container">
+  {{help-card help=model.help}}
+  <h4>
+    <i class="material-icons">fingerprint</i>
+    Indicators
+  </h4>
+
+  <div class="row">
+    <div class="col s6">
+      <a class="btn waves-effect waves-light" a href="/unfetter-discover-api/bundles/indicators" download="indicators.json">
+        Download
+      </a>
+    </div>
+
+    <div class="col s6 right-align">
+      <span class="right-align">Results: {{model.items.length}}</span>
+    </div>
+  </div>
+  {{#md-collection content=model.items as |item|}}
+    <div class="collection-item">
+      {{#link-to "indicator" item.id}}
+      {{item.name}}
+      {{/link-to}}
+
+      <span class="chip">{{item.pattern}}</span>
+    </div>
+  {{/md-collection}}
+</div>
