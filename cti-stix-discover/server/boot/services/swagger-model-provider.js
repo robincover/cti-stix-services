@@ -1,5 +1,7 @@
 'use strict';
 
+const lodash = require('lodash');
+
 /**
  * Swagger Model Provider implements remote methods for Loopback Models using Swagger
  *
@@ -201,14 +203,12 @@ module.exports = class SwaggerModelProvider {
    */
   findReferencedObjects(referencedIds, model) {
     const dataAccessObject = model.dataSource.DataAccessObject;
-    const camelize = require('camelize');
-    const capitalize = require('capitalize');
 
     const promises = [];
     referencedIds.forEach(function(referencedId) {
       const referencedType = this.getReferencedType(referencedId);
-      const camelizedReferencedType = camelize(referencedType);
-      const referencedModelName = capitalize(camelizedReferencedType);
+      const camelizedReferencedType = lodash.camelCase(referencedType);
+      const referencedModelName = lodash.upperFirst(camelizedReferencedType);
       const findByIdOperationId = this.getFindByIdOperationId(referencedModelName);
       const findByIdMethod = dataAccessObject[findByIdOperationId];
 

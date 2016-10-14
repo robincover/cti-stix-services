@@ -8,8 +8,6 @@
     "posttest": "npm run lint && nsp check"
   },
   "dependencies": {
-    "camelize": "^1.0.0",
-    "capitalize": "^1.0.0",
     "compression": "^1.0.3",
     "cors": "^2.5.2",
     "dasherize": "^2.0.0",
