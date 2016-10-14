@@ -12,6 +12,7 @@ module.exports = class DataSourceProvider {
    */
   constructor(server) {
     this.server = server;
+    this.connectDelay = 10000;
   }
 
   /**
@@ -21,6 +22,7 @@ module.exports = class DataSourceProvider {
    */
   getDataSource() {
     const server = this.server;
+    const self = this;
 
     return new Promise(function(resolve, reject) {
       let dataSource = undefined;
@@ -34,15 +36,55 @@ module.exports = class DataSourceProvider {
       }
 
       if (dataSource) {
-        dataSource.once('connected', function() {
-          const dataSourceConfiguration = {
-            dataSource: dataSource,
-            dataSourceName: dataSourceName
-          };
-          resolve(dataSourceConfiguration);
-        });
+        self.setDataSourceEvents(dataSource, dataSourceName, resolve);
       } else {
         reject();
+      }
+    });
+  }
+
+  /**
+   * Set Data Source Events
+   *
+   * @param {Object} dataSource Loopback Data Source
+   * @param {string} dataSourceName Data Source Name
+   * @param {function} resolve Promise resolve function
+   * @return {undefined}
+   */
+  setDataSourceEvents(dataSource, dataSourceName, resolve) {
+    dataSource.once('connected', function() {
+      const dataSourceConfiguration = {
+        dataSource: dataSource,
+        dataSourceName: dataSourceName
+      };
+      resolve(dataSourceConfiguration);
+    });
+
+    const connectDelay = this.connectDelay;
+    const connectScope = {
+      dataSource: dataSource,
+      dataSourceName: dataSourceName
+    };
+    const connectDataSource = this.connectDataSource.bind(connectScope);
+    dataSource.on('error', function() {
+      console.error(`Data Source Connection Failed [${dataSourceName}]: Retrying after delay ${connectDelay}ms`);
+      setTimeout(connectDataSource, connectDelay);
+    });
+  }
+
+  /**
+   * Connect Data Source
+   *
+   */
+  connectDataSource() {
+    const dataSourceName = this.dataSourceName;
+    console.log(`Connecting to Data Source [${dataSourceName}]`);
+
+    const dataSource = this.dataSource;
+    dataSource.connector.spec = dataSource.connector.settings.spec;
+    this.dataSource.connect(function(error) {
+      if (error) {
+        console.error(`Data Source Connection Failed [${dataSourceName}]: ${error}`);
       }
     });
   }
