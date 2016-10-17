@@ -23,7 +23,7 @@ The Docker application image for this application can be created using the follo
 docker build -t cti-stix-discover .
 ```
 
-The CTI STIX Store container should be started with the following command to provide access over port 80:
+The CTI STIX Store container should be started with the following command:
 
 ```bash
 docker run --name cti-stix-store --link mongo:repository cti-stix-store -d
