@@ -1,0 +1,5 @@
+{
+  "cti-stix-store": {
+    "spec": "http://cti-stix-store:3000/cti-stix-store-api/specifications/swagger.json"
+  }
+}

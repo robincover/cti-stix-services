@@ -1,6 +1,5 @@
 {
   "repository": {
-    "connector": "mongodb",
     "host": "repository"
   }
 }

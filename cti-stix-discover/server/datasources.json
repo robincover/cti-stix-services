@@ -1,0 +1,6 @@
+{
+  "cti-stix-store": {
+    "connector": "loopback-connector-swagger",
+    "spec": "http://localhost:8080/cti-stix-store-api/specifications/swagger.json"
+  }
+}
