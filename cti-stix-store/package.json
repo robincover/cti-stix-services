@@ -23,7 +23,8 @@
     "node-uuid": "^1.4.7",
     "pluralize": "^3.0.0",
     "serve-favicon": "^2.0.1",
-    "strong-error-handler": "^1.0.1"
+    "strong-error-handler": "^1.0.1",
+    "tmp": "0.0.29"
   },
   "devDependencies": {
     "chai": "^3.5.0",

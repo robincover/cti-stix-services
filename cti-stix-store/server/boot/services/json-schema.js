@@ -21,6 +21,16 @@ module.exports = class JsonSchemaService {
   }
 
   /**
+   * Read Schema from location
+   *
+   * @param {string} schemaLocation Schema Location path or URI
+   * @return Promise object resolving to JSON Schema when completed
+   */
+  readSchema(schemaLocation) {
+    return this.refParser.dereference(schemaLocation);
+  }
+
+  /**
    * Get Schema parsed from Objects Directory
    *
    * @return Promise object return JSON Schema when completed
