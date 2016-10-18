@@ -1,5 +1,6 @@
 version: '2'
 services:
+
   cti-stix-gateway:
     container_name: cti-stix-gateway
     image: nginx
@@ -19,15 +20,12 @@ services:
   cti-stix-store:
     container_name: cti-stix-store
     build: cti-stix-store
-    links:
-     - cti-stix-services-mongo:repository
-  cti-stix-services-mongo:
-    container_name: cti-stix-services-mongo
-    image: mongo
+
+
   cti-stix-ui: 
     container_name: cti-stix-ui
     build: cti-stix-ui
-    ports:
     links:
     - cti-stix-store
-    
+    ports:
+    - "50000:50000"
