@@ -7,7 +7,19 @@
 </header>
 {{header-navigation-bar}}
 
-{{liquid-outlet}}
+<div class="container">
+  <h4>
+    <i class="material-icons">error</i>
+    Application Problem
+  </h4>
+
+  {{#md-card}}
+    {{#md-card-content}}
+      {{model}}
+    {{/md-card-content}}
+  {{/md-card}}
+</div>
+
 <footer class="application-footer">
   {{#if model.securityMarking.label}}
   <div class="security-marking-label">
@@ -15,5 +27,3 @@
   </div>
   {{/if}}
 </footer>
-
-{{liquid-modal}}

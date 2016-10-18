@@ -7,7 +7,7 @@ import DS from "ember-data";
  * @extends ember-data/JSONAPIAdapter
  */
 export default DS.JSONAPIAdapter.extend({
-    namespace: "unfetter-discover-api",
+    namespace: "cti-stix-store-api",
 
     securityMarkingLabelHeader: "Security-Marking-Label",
 
