@@ -19,7 +19,10 @@ export default Ember.Route.extend({
                 description: undefined,
                 labels: [],
                 kill_chain_phases: [],
-                external_references: []
+                external_references: [],
+                created: new Date(),
+                modified: new Date(),
+                version: "1"
             }
         };
         model.help = {

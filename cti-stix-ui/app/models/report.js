@@ -24,7 +24,9 @@ export default DS.Model.extend({
     }),
     granular_markings: DS.attr(),
     object_marking_refs: DS.attr(),
-
+    version: DS.attr("string"),
+    created: DS.attr("string"),
+    modified: DS.attr("string"),
     type: Ember.computed("id", function() {
         return "report";
     })

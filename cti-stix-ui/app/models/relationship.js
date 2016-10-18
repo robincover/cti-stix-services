@@ -9,5 +9,8 @@ import DS from "ember-data";
 export default DS.Model.extend({
     relationship_type: DS.attr("string"),
     source_ref: DS.attr("string"),
-    target_ref: DS.attr("string")
+    target_ref: DS.attr("string"),
+    version: DS.attr("string"),
+    created: DS.attr("Date"),
+    modified: DS.attr("Date"),
 });

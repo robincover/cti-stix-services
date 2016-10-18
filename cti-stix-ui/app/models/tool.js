@@ -14,7 +14,9 @@ export default DS.Model.extend({
     aliases: DS.attr(),
     kill_chain_phases: DS.attr(),
     external_references: DS.attr(),
-
+    version: DS.attr("string"),
+    created: DS.attr("string"),
+    modified: DS.attr("string"),
     type: Ember.computed("id", function() {
         return "tool";
     })

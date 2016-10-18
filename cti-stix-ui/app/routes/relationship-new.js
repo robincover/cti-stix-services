@@ -36,7 +36,10 @@ export default Ember.Route.extend({
             relationship_type: undefined,
             source_ref: undefined,
             target_ref: undefined,
-            description: undefined
+            description: undefined,
+            created: new Date(),
+            modified: new Date(),
+            version: "1",
         };
 
         return Ember.RSVP.hash(hash);

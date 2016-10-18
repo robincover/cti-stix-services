@@ -19,7 +19,10 @@ export default Ember.Route.extend({
                 aliases: [],
                 description: undefined,
                 labels: [],
-                external_references: []
+                external_references: [],
+                created: new Date(),
+                modified: new Date(),
+                version: "1"
             },
             relationship: {},
             labels: [

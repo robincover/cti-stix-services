@@ -118,7 +118,10 @@ export default Ember.Controller.extend({
                 const relationship = {
                     relationship_type: "mitigates",
                     source_ref: courseOfActionID,
-                    target_ref: attackPatternID
+                    target_ref: attackPatternID,
+                    created: new Date(),
+                    modified: new Date(),
+                    version: "1"
                 };
 
                 let itemRecord = store.createRecord("relationship", relationship);

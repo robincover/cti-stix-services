@@ -13,7 +13,9 @@ export default DS.Model.extend({
     labels: DS.attr(),
     kill_chain_phases: DS.attr(),
     external_references: DS.attr(),
-
+    version: DS.attr("string"),
+    created: DS.attr("date"),
+    modified: DS.attr("date"),
     type: Ember.computed("id", function() {
         return "attack-pattern";
     })

@@ -13,7 +13,9 @@ export default DS.Model.extend({
     labels: DS.attr(),
     external_references: DS.attr(),
     description: DS.attr("string"),
-
+    version: DS.attr("string"),
+    created: DS.attr("string"),
+    modified: DS.attr("string"),
     type: Ember.computed("id", function() {
         return "threat-actor";
     })

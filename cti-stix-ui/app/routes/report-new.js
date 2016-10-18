@@ -27,7 +27,10 @@ export default Ember.Route.extend({
             labels: [ "attack-pattern" ],
             object_refs: [],
             granular_markings: [],
-            published: new Date()
+            published: new Date(),
+            created: new Date(),
+            modified: new Date(),
+            version: "1"
         };
 
         const store = this.get("store");

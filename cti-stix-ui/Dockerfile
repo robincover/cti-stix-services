@@ -27,4 +27,4 @@ COPY . $WORKING_DIRECTORY
 # ports variables
 EXPOSE 4200 50000 
 
-CMD ["ember","server","--live-reload=port","50000"]
+CMD ["ember","server","--live-reload-port","50000"]

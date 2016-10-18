@@ -18,7 +18,9 @@ export default DS.Model.extend({
     valid_until: DS.attr("date"),
     kill_chain_phases: DS.attr(),
     external_references: DS.attr(),
-
+    version: DS.attr("date"),
+    created: DS.attr("date"),
+    modified: DS.attr("string"),
     type: Ember.computed("id", function() {
         return "indicator";
     })
