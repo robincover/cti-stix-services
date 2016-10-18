@@ -1,5 +1,4 @@
 FROM node:latest
-
 MAINTAINER "unfetter"
 LABEL Description="CTI-STIX-UI"
 
@@ -29,4 +28,3 @@ COPY . $WORKING_DIRECTORY
 EXPOSE 4200 50000 
 
 CMD ["ember","server","--live-reload=port","50000"]
-
