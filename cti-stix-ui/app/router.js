@@ -87,26 +87,6 @@ Router.map(function () {
     });
     this.route("relationship", { path: "/relationships/:id" });
     this.route("relationship-new", { path: "/relationships/new" });
-    this.route("reports", { path: "/reports" }, function() {
-        this.modal("delete-modal", {
-            withParams: ["deleteObjectId"],
-            otherParams: {
-                deleteObject: "deleteObject"
-            },
-            actions: {
-                deleteConfirmed: "deleteConfirmed"
-            }
-        });
-        this.modal("alert-modal", {
-            withParams: ["alertObjectId"],
-            otherParams: {
-                alert: "alert"
-            }
-        });
-    });
-    this.route("report-new", { path: "/reports/new" });
-    this.route("report", { path: "/report/:id" });
-    this.route("report-dashboard", { path: "/reports/:id/dashboard" });
     this.route("relationship-grid", { path: "/relationships/mitigates" }, function() {
         this.modal("alert-modal", {
             withParams: ["alertObjectId"],
@@ -115,8 +95,6 @@ Router.map(function () {
             }
         });
     });
-    this.route("report-kill-chain-phase", { path: "/reports/:id/kill-chain-phases/:phase_name" });
-    this.route("report-mitigates-rating", { path: "/reports/:id/mitigates-ratings/:rating" });
     this.route("partners", { path: "/partners" });
 });
 
