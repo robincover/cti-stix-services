@@ -21,15 +21,7 @@ export default Ember.Route.extend({
                 external_references: [],
                 created: new Date(),
                 modified: new Date(),
-                version: "1",
-                /**      Remove these later when we are sure how to handle them */          
-                x_unfetter_rating_labels: [
-                    { label: "Undefined" },
-                    { label: "None" },
-                    { label: "Low" },
-                    { label: "Medium" },
-                    { label: "High" }
-                ]
+                version: "1"
             },
 
             

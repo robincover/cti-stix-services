@@ -43,15 +43,6 @@ export default Ember.Controller.extend(AddRemoveExternalReferences, AddRemoveLab
                 }
             });
             Ember.set(item, "labels", labelsArray);
-
-            let ratingLabelArray = [];
-            let ratingLabels = Ember.get(item, "x_unfetter_rating_labels");
-            ratingLabels.forEach(function(label) {
-                if (Ember.isPresent(label.label)) {
-                    ratingLabelArray.push(label.label);
-                }
-            });
-            Ember.set(item, "x_unfetter_rating_labels", ratingLabelArray);
             let itemRecord = store.createRecord("course-of-action", item);
             let promise = itemRecord.save();
 

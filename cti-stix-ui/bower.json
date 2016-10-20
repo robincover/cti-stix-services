@@ -1,5 +1,5 @@
 {
-  "name": "cti-sitx-ui",
+  "name": "cti-stix-ui",
   "dependencies": {
     "ember": "~2.7.0",
     "ember-cli-shims": "0.1.1",

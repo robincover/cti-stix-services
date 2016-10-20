@@ -12,7 +12,6 @@ export default DS.Model.extend({
     description: DS.attr(),
     labels: DS.attr(),
     external_references: DS.attr(),
-    x_unfetter_rating_labels: DS.attr(),
     version: DS.attr("string"),
     created: DS.attr("string"),
     modified: DS.attr("string"),
