@@ -15,7 +15,7 @@ export default Ember.Route.extend({
     model() {
         const hash = {};
         hash.help = {
-            description: "Relationships are what makes the Unfetter Discover project unique.   One type of relationship is created "+
+            description: "One type of relationship is created "+
             "to identify that a particular Course Of Action can mitigate a particular Attack Pattern.  Another type of relationship "+
             "describes an Attack Pattern is used by a Threat Actor."
         };
