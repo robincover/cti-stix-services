@@ -46,7 +46,7 @@ module.exports = class SwaggerTransformerService {
    * @return {Object} Updated Swagger Specification
    */
   processDefinitions(specification) {
-    this.this.unusedDefinitions.forEach(function(unusedDefinitionKey) {
+    this.unusedDefinitions.forEach(function(unusedDefinitionKey) {
       delete specification.definitions[unusedDefinitionKey];
     });
 
