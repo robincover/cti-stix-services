@@ -17,6 +17,11 @@ module.exports = class SwaggerTransformerService {
       'id',
       'type'
     ];
+
+    this.unusedDefinitions = [
+      'ObjectID',
+      'x-any'
+    ];
   }
 
   /**
@@ -41,6 +46,10 @@ module.exports = class SwaggerTransformerService {
    * @return {Object} Updated Swagger Specification
    */
   processDefinitions(specification) {
+    this.unusedDefinitions.forEach(function(unusedDefinitionKey) {
+      delete specification.definitions[unusedDefinitionKey];
+    });
+
     for (const key in specification.definitions) {
       const definition = specification.definitions[key];
 
@@ -62,6 +71,9 @@ module.exports = class SwaggerTransformerService {
         delete definition.properties.id;
       }
     }
+
+    const resourceLinksKey = this.getResourceLinksKey();
+    specification.definitions[resourceLinksKey] = this.getResourceLinksDefinition();
 
     specification.definitions['ErrorObject'] = this.getErrorObjectDefinition();
 
@@ -152,6 +164,15 @@ module.exports = class SwaggerTransformerService {
           method.responses['404'] = notFoundResponse;
           method.responses['422'] = unprocessableEntityResponse;
         }
+
+        // Remove invalid description field
+        if (Array.isArray(method.parameters)) {
+          method.parameters.forEach(function(parameter) {
+            if (parameter.schema) {
+              delete parameter.schema.description;
+            }
+          });
+        }
       }
     }
 
@@ -210,16 +231,13 @@ module.exports = class SwaggerTransformerService {
   getResourceDefinition(key) {
     const resourceObjectKey = this.getResourceObjectKey(key);
 
+    const resourceLinksKey = this.getResourceLinksKey();
+
     const definition = {
       type: 'object',
       properties: {
         links: {
-          type: 'object',
-          properties: {
-            self: {
-              type: 'string'
-            }
-          }
+          $ref: this.getDefinitionRef(resourceLinksKey)
         },
         data: {
           $ref: this.getDefinitionRef(resourceObjectKey)
@@ -239,16 +257,13 @@ module.exports = class SwaggerTransformerService {
   getResourcesDefinition(key) {
     const resourceObjectKey = this.getResourceObjectKey(key);
 
+    const resourceLinksKey = this.getResourceLinksKey();
+
     const definition = {
       type: 'object',
       properties: {
         links: {
-          type: 'object',
-          properties: {
-            self: {
-              type: 'string'
-            }
-          }
+          $ref: this.getDefinitionRef(resourceLinksKey)
         },
         data: {
           type: 'array',
@@ -374,6 +389,32 @@ module.exports = class SwaggerTransformerService {
    */
   getResourcesKey(key) {
     return `${key}Resources`;
+  }
+
+  /**
+   * Get Resource Links Key
+   *
+   * @return {string} Resource Links Key
+   */
+  getResourceLinksKey() {
+    return 'ResourceLinks';
+  }
+
+  /**
+   * Get Resource Links Definition
+   *
+   * @return {string} Resource Links Key
+   */
+  getResourceLinksDefinition() {
+    const definition = {
+      type: 'object',
+      properties: {
+        self: {
+          type: 'string'
+        }
+      }
+    };
+    return definition;
   }
 
   /**
