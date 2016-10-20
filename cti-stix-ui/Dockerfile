@@ -19,7 +19,6 @@ RUN echo "Building cti-ui"
 
 RUN npm install
 RUN bower --allow-root install
-RUN npm rebuild node-sass
 #RUN ember build
 
 COPY . $WORKING_DIRECTORY

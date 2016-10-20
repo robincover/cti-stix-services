@@ -49,9 +49,9 @@ services:
      - "50000"
      - -ssl
      - -ssl-key
-     - /etc/pki/tls/certs/localhost.key
+     - /etc/pki/tls/certs/server.key
      - -ssl-cert
-     - /etc/pki/tls/certs/localhost.crt
+     - /etc/pki/tls/certs/server.crt
 
 
 
