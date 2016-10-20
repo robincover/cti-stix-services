@@ -130,12 +130,50 @@ module.exports = class LoopbackModelService {
         if (property.items) {
           if (property.items.type === 'string') {
             schemaProperties[propertyKey] = [String];
+          } else if (property.items.type === 'object') {
+            const itemObjectDefinition = this.getItemObjectDefinition(property.items);
+            schemaProperties[propertyKey] = [itemObjectDefinition];
           }
         }
       }
     }
 
     return schemaProperties;
+  }
+
+  /**
+   * Get Item Object Definition
+   *
+   * @param {Object} itemDefinition JSON Schema Item Definition
+   * @return {Object} Item Object Definition for LoopBack Model
+   */
+  getItemObjectDefinition(itemDefinition) {
+    const itemProperties = itemDefinition.properties;
+
+    const itemObjectDefinition = {};
+    for (const itemPropertyKey in itemProperties) {
+      const itemProperty = itemProperties[itemPropertyKey];
+      if (itemProperty.type === 'integer') {
+        itemObjectDefinition[itemPropertyKey] = Number;
+      } else {
+        itemObjectDefinition[itemPropertyKey] = String;
+      }
+    }
+
+    const itemType = this.getItemObjectType(itemDefinition);
+    itemObjectDefinition.type = itemType;
+
+    return itemObjectDefinition;
+  }
+
+  /**
+   * Get Item Object Type
+   *
+   * @param {Object} itemDefinition Item Definition
+   * @return Item Object Type
+   */
+  getItemObjectType(itemDefinition) {
+    return itemDefinition.title.replace(/ /g, '');
   }
 
   /**

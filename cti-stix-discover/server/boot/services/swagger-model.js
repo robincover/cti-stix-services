@@ -1,6 +1,7 @@
 'use strict';
 
 const lodash = require('lodash');
+const pluralize = require('pluralize');
 
 /**
  * Swagger Model Service creates Loopback Models based on Swagger Specification
@@ -24,6 +25,8 @@ module.exports = class SwaggerModelService {
   getModels(dataSource) {
     const models = [];
 
+    const nestedModels = {};
+
     if (dataSource.connected) {
       const swaggerClient = this.getSwaggerClient(dataSource);
       for (const tag in swaggerClient.apis) {
@@ -36,7 +39,7 @@ module.exports = class SwaggerModelService {
             const findOperationPath = findOperation.path;
             console.log(`Located Find Operation [${findOperationId}] with Path [${findOperationPath}]`);
 
-            const modelProperties = this.getModelProperties(findOperation);
+            const modelProperties = this.getModelProperties(findOperation, nestedModels);
             const modelOptions = this.getModelOptions(findOperation);
             const model = dataSource.createModel(tag, modelProperties, modelOptions);
             this.disableRemoteMethods(model);
@@ -44,6 +47,20 @@ module.exports = class SwaggerModelService {
           }
         }
       }
+    }
+
+    for (const nestedModelTag in nestedModels) {
+      const modelProperties = nestedModels[nestedModelTag];
+      const modelOptions = {
+        idInjection: false
+      };
+      const model = dataSource.createModel(nestedModelTag, modelProperties, modelOptions);
+      const modelMethods = model.sharedClass.methods();
+      modelMethods.forEach(function(modelMethod) {
+        model.disableRemoteMethodByName(modelMethod.name);
+      });
+      this.disableRemoteMethods(model);
+      models.push(model);
     }
 
     return models;
@@ -63,10 +80,16 @@ module.exports = class SwaggerModelService {
    * Get Model Properties for specified operation
    *
    * @param {Object} operation Operation Object
+   * @param {Object} nestedModels Nested Models
    * @return {Object} Properties Object
    */
-  getModelProperties(operation) {
+  getModelProperties(operation, nestedModels) {
     const modelProperties = {};
+    modelProperties.id = {
+      id: true,
+      generated: false,
+      type: 'string'
+    };
 
     const response = operation.successResponse['200'];
     if (response) {
@@ -77,11 +100,7 @@ module.exports = class SwaggerModelService {
           if (resourceObject.attributes) {
             for (const key in resourceObject.attributes) {
               const attribute = resourceObject.attributes[key];
-              const attributeType = this.getAttributeType(attribute);
-
-              modelProperties[key] = {
-                type: attributeType
-              };
+              modelProperties[key] = this.getModelProperty(key, attribute, nestedModels);
             }
           }
         }
@@ -89,6 +108,63 @@ module.exports = class SwaggerModelService {
     }
 
     return modelProperties;
+  }
+
+  /**
+   * Get Model Property
+   *
+   * @param {string} attributeKey Key for Attribute
+   * @param {Object} attribute Attribute Object
+   * @param {Object} nestedModels Nested Models
+   * @return {Object} Model Property Definition
+   */
+  getModelProperty(attributeKey, attribute, nestedModels) {
+    let modelProperty;
+
+    if (lodash.isArray(attribute)) {
+      if (attribute.length) {
+        const firstItem = attribute[0];
+        const firstItemType = this.getAttributeType(firstItem);
+
+        let itemPropertyType = String;
+
+        if (firstItemType === 'object') {
+          itemPropertyType = {};
+
+          for (const itemAttributeKey in firstItem) {
+            itemPropertyType[itemAttributeKey] = String;
+          }
+
+          const modelPropertyItemType = this.getModelPropertyItemType(attributeKey);
+          nestedModels[modelPropertyItemType] = Object.assign({}, itemPropertyType);
+          itemPropertyType.type = modelPropertyItemType;
+        }
+
+        modelProperty = [itemPropertyType];
+      } else {
+        modelProperty = [String];
+      }
+    } else {
+      const attributeType = this.getAttributeType(attribute);
+      modelProperty = {
+        type: attributeType
+      };
+    }
+
+    return modelProperty;
+  }
+
+  /**
+   * Get Model Property Item Type
+   *
+   * @param {string} attributeKey Attribute Key
+   * @return Item Type normalized
+   */
+  getModelPropertyItemType(attributeKey) {
+    const camelized = lodash.camelCase(attributeKey);
+    const capitalized = lodash.upperFirst(camelized);
+    const modelPropertyItemType = pluralize(capitalized, 1);
+    return modelPropertyItemType;
   }
 
   /**
@@ -126,6 +202,7 @@ module.exports = class SwaggerModelService {
    */
   getModelOptions(findOperation) {
     const modelOptions = {
+      idInjection: false,
       http: {
         path: findOperation.path
       }
