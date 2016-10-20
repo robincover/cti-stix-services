@@ -1,15 +1,21 @@
 version: '2'
 services:
+
   cti-stix-gateway:
     container_name: cti-stix-gateway
     image: nginx
     volumes:
      - ./cti-stix-gateway/nginx/conf.d:/etc/nginx/conf.d
+     - ./certs/:/etc/pki/tls/certs
+    depends_on:
+     - cti-stix-openssl         
     ports:
-     - "8080:80"
+     - "443:443"
     links:
      - cti-stix-discover
      - cti-stix-store
+     - cti-stix-ui
+
   cti-stix-discover:
     container_name: cti-stix-discover
     build: cti-stix-discover
@@ -17,9 +23,56 @@ services:
      - cti-stix-store:cti-stix-store
   cti-stix-store:
     container_name: cti-stix-store
-    build: cti-stix-store
+    build: ./cti-stix-store
+    ports:
+     - "3000:3000"
     links:
-     - cti-stix-services-mongo:repository
-  cti-stix-services-mongo:
-    container_name: cti-stix-services-mongo
+     - mongo:repository
+  mongo:
     image: mongo
+    container_name: mongo
+
+
+  cti-stix-ui: 
+    container_name: cti-stix-ui
+    build: ./cti-stix-ui
+    ports:
+     - "50000:50000"
+    depends_on:
+     - cti-stix-openssl
+    volumes:
+     - ./certs/:/etc/pki/tls/certs
+    entrypoint:
+     - ember
+     - server
+     - -live-reload-port
+     - "50000"
+     - -ssl
+     - -ssl-key
+     - /etc/pki/tls/certs/server.key
+     - -ssl-cert
+     - /etc/pki/tls/certs/server.crt
+
+
+
+  cti-stix-openssl:
+    image: svagi/openssl
+    container_name: cti-stix-openssl
+    entrypoint:
+     - openssl
+     - req
+     - -subj
+     - /CN=localhost/DC=localhost/DC=localdomain
+     - -new
+     - -newkey
+     - rsa:2048
+     - -days
+     - "365"
+     - -nodes
+     - -x509
+     - -keyout
+     - /tmp/certs/server.key
+     - -out
+     - /tmp/certs/server.crt
+    volumes:
+     - ./certs/:/tmp/certs

@@ -1,0 +1,61 @@
+{{#navigation-bar}}
+  <div class="container">
+  {{#link-to "index" class="brand-logo"}}
+    CTI-STIX-SERVICES
+  {{/link-to}}
+
+  <a class="button-collapse" data-activates="side-nav">
+    <i class="material-icons">menu</i>
+  </a>
+
+  <ul id="settings-dropdown" class="dropdown-content">
+    {{#link-to "attack-patterns" tagName="li"}}
+      {{link-to "Attack Patterns" "attack-patterns"}}
+    {{/link-to}}
+    {{#link-to "course-of-actions" tagName="li"}}
+      {{link-to "Courses of Actions" "course-of-actions"}}
+    {{/link-to}}
+    {{#link-to "indicators" tagName="li"}}
+      {{link-to "Indicators" "indicators"}}
+    {{/link-to}}
+    {{#link-to "relationships" tagName="li"}}
+      {{link-to "Relationships" "relationships"}}
+    {{/link-to}}
+    {{#link-to "threat-actors" tagName="li"}}
+      {{link-to "Threat Actors" "threat-actors"}}
+    {{/link-to}}
+  </ul>
+
+  <ul class="right hide-on-med-and-down">
+    <li><a target="_blank" href="/cti-stix-store-api/specifications/">View API</a></li>
+    <li>
+      <a class="dropdown-button" href="#settings-dropdown" data-activates="settings-dropdown">
+        STIX Objects
+        <i class="material-icons right">arrow_drop_down</i>
+      </a>
+    </li>
+    {{#link-to "partners" tagName="li"}}
+      {{link-to "Partners" "partners"}}
+    {{/link-to}}
+  </ul>
+  </div>
+
+  <ul class="side-nav" id="side-nav">
+    {{#link-to "attack-patterns" tagName="li"}}
+      {{link-to "Attack Patterns" "attack-patterns"}}
+    {{/link-to}}
+    {{#link-to "course-of-actions" tagName="li"}}
+      {{link-to "Courses of Actions" "course-of-actions"}}
+    {{/link-to}}
+    {{#link-to "indicators" tagName="li"}}
+      {{link-to "Indicators" "indicators"}}
+    {{/link-to}}
+    {{#link-to "relationships" tagName="li"}}
+      {{link-to "Relationships" "relationships"}}
+    {{/link-to}}
+    {{#link-to "threat-actors" tagName="li"}}
+      {{link-to "Threat Actors" "threat-actors"}}
+    {{/link-to}}
+
+  </ul>
+{{/navigation-bar}}

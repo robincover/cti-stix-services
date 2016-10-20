@@ -1,0 +1,101 @@
+import Ember from 'ember';
+import config from './config/environment';
+
+const Router = Ember.Router.extend({
+    location: config.locationType,
+    rootURL: config.rootURL
+});
+
+Router.map(function () {
+    this.route("attack-patterns", function() {
+        this.modal("delete-modal", {
+            withParams: ["deleteObjectId"],
+            otherParams: {
+                deleteObject: "deleteObject"
+            },
+            actions: {
+                deleteConfirmed: "deleteConfirmed"
+            }
+        });
+        this.modal("alert-modal", {
+            withParams: ["alertObjectId"],
+            otherParams: {
+                alert: "alert"
+            }
+        });
+    });
+    this.route("attack-pattern", { path: "/attack-patterns/:id" });
+    this.route("attack-pattern-new", { path: "/attack-pattern/new" });
+    this.route("threat-actors", function () {
+        this.modal("delete-modal", {
+            withParams: ["deleteObjectId"],
+            otherParams: {
+                deleteObject: "deleteObject"
+            },
+            actions: {
+                deleteConfirmed: "deleteConfirmed"
+            }
+        });
+        this.modal("alert-modal", {
+            withParams: ["alertObjectId"],
+            otherParams: {
+                alert: "alert"
+            }
+        });
+    });
+    this.route("threat-actor", { path: "/threat-actors/:id" });
+    this.route("threat-actor-new", { path: "/threat-actors/new" });
+    this.route("tool", { path: "/tools/:id" });
+    this.route("course-of-actions", function() {
+        this.modal("delete-modal", {
+            withParams: ["deleteObjectId"],
+            otherParams: {
+                deleteObject: "deleteObject"
+            },
+            actions: {
+                deleteConfirmed: "deleteConfirmed"
+            }
+        });
+        this.modal("alert-modal", {
+            withParams: ["alertObjectId"],
+            otherParams: {
+                alert: "alert"
+            }
+        });
+    });
+    this.route("course-of-action", { path: "/course-of-actions/:id" });
+    this.route("course-of-action-new", { path: "/course-of-actions/new" });
+    this.route("indicator", { path: "/indicators/:id" });
+    this.route("indicators");
+    this.route("malware", { path: "/malwares/:id" });
+    this.route("relationships", function() {
+        this.modal("delete-modal", {
+            withParams: ["deleteObjectId"],
+            otherParams: {
+                deleteObject: "deleteObject"
+            },
+            actions: {
+                deleteConfirmed: "deleteConfirmed"
+            }
+        });
+        this.modal("alert-modal", {
+            withParams: ["alertObjectId"],
+            otherParams: {
+                alert: "alert"
+            }
+        });
+    });
+    this.route("relationship", { path: "/relationships/:id" });
+    this.route("relationship-new", { path: "/relationships/new" });
+    this.route("relationship-grid", { path: "/relationships/mitigates" }, function() {
+        this.modal("alert-modal", {
+            withParams: ["alertObjectId"],
+            otherParams: {
+                alert: "alert"
+            }
+        });
+    });
+    this.route("partners", { path: "/partners" });
+});
+
+export default Router;

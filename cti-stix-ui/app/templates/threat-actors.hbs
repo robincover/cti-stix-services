@@ -1,0 +1,41 @@
+<div class="container">
+  {{help-card help=model.help}}
+  <h4>
+    <i class="material-icons">person</i>
+    Threat Actors
+  </h4>
+
+    <div class="row">
+      <div class="col s6">
+        {{#link-to "threat-actor-new" class="btn waves-effect waves-light"}}
+          New
+        {{/link-to}}
+{{!--        
+        <a class="btn waves-effect waves-light" a href="/cti-stix-store/bundles/threat-actors" download ="threat-actors.json">
+          Download
+        </a>
+--}}        
+      </div>
+
+      <div class="col s6 right-align">
+        <span class="right-align">Results: {{model.items.length}}</span>
+      </div>
+    </div>
+
+    {{#md-collection content=model.items as |item|}}
+      <div class="collection-item">
+        <div class="row">
+          <div class="col s10">
+            {{#link-to "threat-actor" item.id}}
+            <strong> {{item.name}}</strong>
+            {{/link-to}}
+          </div>
+          <div class="secondary-content col s2 right-align">    
+            {{#link-to (query-params deleteObjectId=item.id) class="btn waves-effect waves-light red"}}
+            <i class="material-icons">delete</i>
+            {{/link-to}}
+          </div>
+        </div>
+      </div>
+    {{/md-collection}}
+</div>

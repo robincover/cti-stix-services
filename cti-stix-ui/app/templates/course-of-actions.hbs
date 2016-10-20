@@ -1,0 +1,41 @@
+<div class="container">
+{{help-card help=model.help}}
+<h4>
+  <i class="material-icons">assignment</i>
+  Courses of Action
+</h4>
+
+<div class="row">
+  <div class="col s6">
+    {{#link-to "course-of-action-new" class="btn waves-effect waves-light"}}
+      New
+    {{/link-to}} 
+{{!--    
+    <a class="btn waves-effect waves-light" a href="/cti-stix-store/bundles/course-of-actions" download ="course-of-actions.json">
+      Download
+    </a>
+--}}    
+  </div>
+
+  <div class="col s6 right-align">
+    <span class="right-align">Results: {{model.items.length}}</span>
+  </div>
+</div>
+
+{{#md-collection content=model.items as |item|}}
+  <div class="collection-item">
+    {{#link-to "course-of-action" item.id}}
+    {{item.name}}
+    {{/link-to}}
+
+    {{#each item.external_references as |external_reference|}}        
+      <div class="chip">{{external_reference.source_name}}:{{external_reference.external_id}}</div>        
+    {{/each}}
+    <div class="secondary-content">    
+      {{#link-to (query-params deleteObjectId=item.id) class="btn waves-effect waves-light red"}}
+        <i class="material-icons">delete</i>
+      {{/link-to}}
+    </div>
+  </div>
+{{/md-collection}}
+</div>

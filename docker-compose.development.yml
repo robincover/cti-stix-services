@@ -1,0 +1,5 @@
+version: '2'
+services:
+  cti-stix-ui: 
+    volumes:
+    - ./cti-stix-ui/app:/usr/share/cti-stix-ui/app

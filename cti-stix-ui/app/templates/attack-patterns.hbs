@@ -1,0 +1,43 @@
+<div class="container">
+  {{help-card help=model.help}}
+  <h4>
+    <i class="material-icons">work</i>
+    Attack Patterns
+  </h4>
+
+  <div class="row">
+    <div class="col s6">
+      {{#link-to "attack-pattern-new" class="btn waves-effect waves-light"}}
+        New
+      {{/link-to}}
+ {{!--
+     <a class="btn waves-effect waves-light" a href="/cti-stix-store/bundles/attack-patterns" download="attack-patterns.json">
+        Download
+      </a>
+--}}
+    </div>
+
+    <div class="col s6 right-align">
+      <span class="right-align">Results: {{model.items.length}}</span>
+    </div>
+  </div>
+  {{#each phaseNameGroups as |phaseNameGroup|}}
+    <h5>{{undasherize-label phaseNameGroup.phaseName}}</h5>
+    {{#md-collection content=phaseNameGroup.attackPatterns as |item|}}
+      <div class="collection-item">
+        {{#link-to "attack-pattern" item.id}}
+        {{item.name}}
+        {{/link-to}}
+
+        {{#each item.kill_chain_phases as |kill_chain_phase|}}        
+          <div class="chip">{{kill_chain_phase.phase_name}}</div>        
+        {{/each}}
+        <div class="secondary-content">    
+          {{#link-to (query-params deleteObjectId=item.id) class="btn waves-effect waves-light red"}}
+            <i class="material-icons">delete</i>
+          {{/link-to}}
+        </div>
+      </div>
+    {{/md-collection}}
+  {{/each}}
+</div>
