@@ -44,7 +44,7 @@ module.exports = class SwaggerTransformerService {
     for (const key in specification.definitions) {
       const definition = specification.definitions[key];
 
-      if (definition.properties.id) {
+      if (this.isResourceObjectDefinition(definition)) {
         const attributesKey = this.getAttributesKey(key);
         specification.definitions[attributesKey] = this.getAttributesDefinition(definition);
 
@@ -58,6 +58,8 @@ module.exports = class SwaggerTransformerService {
         specification.definitions[resourcesKey] = this.getResourcesDefinition(key);
 
         delete specification.definitions[key];
+      } else if (definition.properties) {
+        delete definition.properties.id;
       }
     }
 
@@ -67,6 +69,26 @@ module.exports = class SwaggerTransformerService {
     specification.definitions[errorObjectsKey] = this.getErrorObjectsDefinition();
 
     return specification;
+  }
+
+  /**
+   * Is Resource Object Definition
+   *
+   * @param {Object} definition Schema Object Definition
+   * @return {boolean} Resource Object Definition Status
+   */
+  isResourceObjectDefinition(definition) {
+    let resourceObjectDefinition = false;
+
+    if (definition.properties) {
+      if (definition.properties.id) {
+        if (definition.properties.id.type === 'string') {
+          resourceObjectDefinition = true;
+        }
+      }
+    }
+
+    return resourceObjectDefinition;
   }
 
   /**

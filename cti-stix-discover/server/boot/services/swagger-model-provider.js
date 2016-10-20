@@ -81,8 +81,6 @@ module.exports = class SwaggerModelProvider {
         service: this
       };
       model[methodName] = this[methodName].bind(context);
-    } else {
-      console.error(`Data Access Object method [${operationId}] not found`);
     }
   }
 

@@ -1,6 +1,13 @@
 {
   "loopback-component-explorer": {
     "mountPath": "/cti-stix-discover-api/specifications",
+    "version": "0.2.0",
+    "apiInfo": {
+      "title": "Structured Threat Information eXpression Discover Services",
+      "description": "Cyber Threat Intelligence Discover Services for Structured Threat Information eXpression 2.0",
+      "license": "MIT",
+      "licenseUrl": "https://opensource.org/licenses/MIT"
+    },
     "consumes": [
       "application/vnd.api+json"
     ],
